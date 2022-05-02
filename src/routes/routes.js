@@ -13,10 +13,10 @@ route.post('/register', login.register);
 // to login
 route.post('/login', login.login);
 
-route.post('/createProduct',upload.single('image'),product.createProduct);
-route.get('/getOneByName',product.getOneByName);
-route.get('/getAll',product.getAll);
-route.put('/updateProduct',upload.single('image'),product.updateProduct);
-route.delete('/deleteProduct',isAuthenticated.verifyToken,product.deleteProduct);
+route.post('/createProduct', upload.single('image'), product.createProduct);
+route.get('/getOneByName', product.getOneByName);
+route.get('/getAll', product.getAll);
+route.put('/updateProduct', upload.single('image'), product.updateProduct);
+route.delete('/deleteProduct', product.deleteProduct);
 
 module.exports = route;

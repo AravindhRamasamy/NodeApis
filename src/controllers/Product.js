@@ -2,49 +2,49 @@ const services = require('../service/services');
 
 function createProduct(req, res, next) {
     try {
-        services.createProduct(req,res);
+        services.createProduct(req, res);
     } catch (err) {
         console.error(`Error while Creating`, err.message);
         next(err);
     }
-  }
-  
-  function updateProduct(req, res, next) {
-    try {
-      services.updateProduct(req,res);
-    } catch (err) {
-      console.error(`Error while Login`, err.message);
-      next(err);
-    }
-  }
+}
 
-  function deleteProduct(req, res, next) {
+function updateProduct(req, res, next) {
     try {
-      services.deleteProduct(req.body);
+        services.updateProduct(req, res);
     } catch (err) {
-      console.error(`Error while Login`, err.message);
-      next(err);
+        console.error(`Error while Login`, err.message);
+        next(err);
     }
-  }
-  
-  function getAll(req, res, next) {
-    try {
-      services.getAll(req, res);
-    } catch (err) {
-      console.error(`Error while Login`, err.message);
-      next(err);
-    }
-  }
+}
 
-  function getOneByName(req, res, next) {
+function deleteProduct(req, res, next) {
     try {
-      services.getOneByName(req, res);
+        services.deleteProduct(req, res);
     } catch (err) {
-      console.error(`Error while Login`, err.message);
-      next(err);
+        console.error(`Error while Login`, err.message);
+        next(err);
     }
-  }
-  
-  module.exports = {
-    createProduct,updateProduct,deleteProduct,getAll,getOneByName
-  };
+}
+
+function getAll(req, res, next) {
+    try {
+        services.getAll(req, res);
+    } catch (err) {
+        console.error(`Error while Login`, err.message);
+        next(err);
+    }
+}
+
+function getOneByName(req, res, next) {
+    try {
+        services.getOneByName(req, res);
+    } catch (err) {
+        console.error(`Error while Login`, err.message);
+        next(err);
+    }
+}
+
+module.exports = {
+    createProduct, updateProduct, deleteProduct, getAll, getOneByName
+};

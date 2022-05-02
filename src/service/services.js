@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const usermodel = require('../models/usermodel');
 const auth = require("../middleware/auth");
-const { queryTable, insertTable,updateTable } = require('../utils/DBQuerys');
+const { queryTable, insertTable, updateTable, deleteTable } = require('../utils/DBQuerys');
 const { logger } = require('../utils/logger');
 
 const createUser = (req, res) => {
@@ -80,14 +80,21 @@ const updateProduct = (req, res) => {
             contentType: 'image/png'
         }
     }
-    Promise.resolve(updateTable('products', { name: products.name },products)).then(() => {
-            res.send('product updated')
+    Promise.resolve(updateTable('products', { name: products.name }, products)).then(() => {
+        res.send('product updated')
     }).catch(err => { logger.error(err) })
 }
 
 const getOneByName = (req, res) => {
     query = { name: req.query.name }
     Promise.resolve(queryTable('products', query)).then((result) => {
+        res.send(result)
+    }).catch(err => { logger.error(err) })
+}
+
+const deleteProduct = (req, res) => {
+    query = { name: req.query.name }
+    Promise.resolve(deleteTable('products', query)).then((result) => {
         res.send(result)
     }).catch(err => { logger.error(err) })
 }
@@ -101,5 +108,5 @@ const getAll = (req, res) => {
 
 
 
-module.exports = { createUser, login, createProduct,updateProduct,getOneByName,getAll}
+module.exports = { createUser, login, createProduct, updateProduct, deleteProduct, getOneByName, getAll }
 

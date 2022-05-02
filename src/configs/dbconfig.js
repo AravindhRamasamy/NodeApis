@@ -5,7 +5,7 @@ const HOST = config.DB_HOST
 const PORT = config.DB_PORT
 const NAME = config.DB_NAME
 
-const url = "mongodb://"+HOST+":"+PORT+"/"+NAME
+const url = "mongodb://" + HOST + ":" + PORT + "/" + NAME
 
 let db;
 

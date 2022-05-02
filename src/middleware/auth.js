@@ -20,11 +20,11 @@ const verifyToken = (req, res, next) => {
 
 const createToken = payload => {
   return new Promise((resolve, reject) => {
-      jwt.sign(payload, config.JWT_SECRET, (err, token) => {
-          if (err) reject(err)
-          else resolve(token)
-      })
+    jwt.sign(payload, config.JWT_SECRET, (err, token) => {
+      if (err) reject(err)
+      else resolve(token)
+    })
   })
 }
 
-module.exports = {verifyToken,createToken};
+module.exports = { verifyToken, createToken };
