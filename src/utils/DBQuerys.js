@@ -27,8 +27,8 @@ const insertTable = (table, doc) => {
 
 const insertOrder = (table, doc) => {
     const query = [doc]
-    return new Promise((resolve, reject) => mongocon.getDb().collection(table).createIndex({ orderId: 1 }, { unique: true },(err,cursor)=>{
-       return resolve(mongocon.getDb().collection(table).insertMany(query, (err, cursor) => {
+    return new Promise((resolve, reject) => mongocon.getDb().collection(table).createIndex({ orderId: 1 }, { unique: true }, (err, cursor) => {
+        return resolve(mongocon.getDb().collection(table).insertMany(query, (err, cursor) => {
             if (err) {
                 logger.error(`Unable to query "${table}" table!` + err.message)
                 return reject(err)

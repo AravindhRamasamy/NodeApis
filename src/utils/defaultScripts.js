@@ -1,14 +1,14 @@
-const { insertTable,queryTable } = require('../utils/DBQuerys');
+const { insertTable, queryTable } = require('../utils/DBQuerys');
 let logger = require('./logger').logger
 
 const userData = {
-    username:"admin",
-    email:"admin@master.com",
-    password:"$2a$10$mS4Lovbb6GyonGSQF5VjI.nekhKb58nb69ALuMoczvxDiBgjftEs2",
-    phonenumber:"9876543210"
+    username: "admin",
+    email: "admin@master.com",
+    password: "$2a$10$mS4Lovbb6GyonGSQF5VjI.nekhKb58nb69ALuMoczvxDiBgjftEs2",
+    phonenumber: "9876543210"
 }
 
-const defaultAdmin=()=>{
+const defaultAdmin = () => {
     queryTable('usersDetail', { username: userData.username }).then((result) => {
         if (result === undefined || result.length === 0) {
             Promise.resolve(insertTable('usersDetail', userData)).then(() => {
@@ -20,4 +20,4 @@ const defaultAdmin=()=>{
     }).catch(err => { logger.error(err) })
 }
 
-module.exports=defaultAdmin
+module.exports = defaultAdmin
