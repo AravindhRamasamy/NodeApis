@@ -1,14 +1,15 @@
 const express = require('express')
 const cors = require('cors')
 const mongoconnection = require('./src/configs/dbconfig')
-
+const defaultAdmin = require('./src/utils/defaultScripts')
 var bodyParser = require('body-parser');
 let logger = require('./src/utils/logger').logger
 let app = express();
 const route = require('./src/routes/routes');
 Promise.all([
-    mongoconnection.createConnection()
+    mongoconnection.createConnection(),
 ]).then(() => {
+    defaultAdmin()
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use('/', route)

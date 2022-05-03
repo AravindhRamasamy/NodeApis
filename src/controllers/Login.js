@@ -11,7 +11,7 @@ function register(req, res, next) {
 
 function login(req, res, next) {
   try {
-    services.login(req.body);
+    services.login(req,res);
   } catch (err) {
     console.error(`Error while Login`, err.message);
     next(err);

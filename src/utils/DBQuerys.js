@@ -25,6 +25,19 @@ const insertTable = (table, doc) => {
     }))
 }
 
+const insertOrder = (table, doc) => {
+    const query = [doc]
+    return new Promise((resolve, reject) => mongocon.getDb().collection(table).createIndex({ orderId: 1 }, { unique: true },(err,cursor)=>{
+       return resolve(mongocon.getDb().collection(table).insertMany(query, (err, cursor) => {
+            if (err) {
+                logger.error(`Unable to query "${table}" table!` + err.message)
+                reject(err)
+            }
+            else { return resolve(cursor) }
+        }))
+    }))
+}
+
 const updateTable = (table, primary, changes) => {
     var newch = { $set: changes }
     return new Promise((resolve, reject) => mongocon.getDb().collection(table).updateOne(primary, newch, function (err, cursor) {
@@ -50,5 +63,6 @@ module.exports = {
     queryTable,
     insertTable,
     updateTable,
-    deleteTable
+    deleteTable,
+    insertOrder
 }
