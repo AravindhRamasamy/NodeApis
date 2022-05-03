@@ -12,7 +12,7 @@ const defaultAdmin=()=>{
     queryTable('usersDetail', { username: userData.username }).then((result) => {
         if (result === undefined || result.length === 0) {
             Promise.resolve(insertTable('usersDetail', userData)).then(() => {
-                logger.error('admin created')
+                logger.info('admin created')
             }).catch(err => { logger.error(err) })
         } else {
             logger.error('admin user already exists')

@@ -10,7 +10,7 @@ const { resolve } = require('path');
 
 const createUser = (req, res) => {
     const userData = _.assign({}, _.pick(req.body, 'username', 'email', 'password', 'phonenumber'))
-    bcrypt.hash(userData.password, 10).then(password=>{
+    bcrypt.hash(userData.password, 10).then(password => {
         userData.password = password
         queryTable('usersDetail', { username: userData.username }).then((result) => {
             if (result === undefined || result.length === 0) {
@@ -27,19 +27,19 @@ const createUser = (req, res) => {
 
 const login = async (req, res) => {
     const userData = _.assign({}, _.pick(req.body, 'username', 'password'))
-    queryTable('usersDetail', { username: userData.username}).then((result) => {
+    queryTable('usersDetail', { username: userData.username }).then((result) => {
         if (result === undefined || result.length === 0) {
             res.send("user doesn't exists")
         } else {
-            bcrypt.compare(userData.password,result[0].password).then((err)=>{
-                if(err){
+            bcrypt.compare(userData.password, result[0].password).then((err) => {
+                if (err) {
                     auth.createToken(userData.username)
-                    .then(token => ({
-                        authorization: token
-                    })).then((authtoken) => {
-                        res.send(authtoken)
-                    })
-                }else{
+                        .then(token => ({
+                            authorization: token
+                        })).then((authtoken) => {
+                            res.send(authtoken)
+                        })
+                } else {
                     res.send("Invalid password")
                 }
             })
@@ -52,7 +52,7 @@ const createProduct = (req, res) => {
         name: req.body.name,
         quantity: req.body.quantity,
         noofitems: req.body.noofitems,
-        price:req.body.price,
+        price: req.body.price,
         type: req.body.type,
         description: req.body.description,
         image: {
@@ -110,40 +110,41 @@ const getAll = (req, res) => {
 }
 
 const listOrder = async (req, res) => {
-    result = await Promise.resolve(queryTable('orders', {}))
-    var response=[]
-    for(var order of result){
-        var image=[]
-        for(var product of order.products){
-            var p=await Promise.resolve(queryTable('products', { name: product.name }))
-          image.push(_.assign(product, {image:p[0].image}))
+    result = await Promise.resolve(queryTable('orders', { user: req.user }))
+    var response = []
+    for (var order of result) {
+        var image = []
+        for (var product of order.products) {
+            var p = await Promise.resolve(queryTable('products', { name: product.name }))
+            image.push(_.assign(product, { image: p[0].image }))
         }
-        order.products=image
+        order.products = image
+        order = _.omit(order, ['user'])
         response.push(order)
     }
     res.send(response)
 }
 
-const orderProduct = (req, res) => {
-    const order = req.body;
-    Promise.resolve(insertOrder('orders', order)).then((result) => {
-        if (result != undefined) {
-            for (var product of req.body.products) {
-                Promise.resolve(queryTable('products', { name: product.name })).then((result) => {
-                    if (result != undefined && result.length != 0) {
-                        const item = result[0]
-                        item.quantity = item.quantity - product.quantity
-                        Promise.resolve(updateTable('products', { name: item.name }, item)).then(() => {
-                            logger.info("Updated stock")
-                        }).catch(err => { logger.error(err) })
-                    }
+const orderProduct = async (req, res) => {
+    var order = req.body;
+    order.user = req.user;
+    var out = await queryTable('orders', { orderId: order.orderId })
+    if (out === undefined || out.length === 0) {
+        Promise.resolve(insertOrder('orders', order))
+        for (var product of req.body.products) {
+            var result = await Promise.resolve(queryTable('products', { name: product.name }))
+            if (result != undefined && result.length != 0) {
+                const item = result[0]
+                item.quantity = item.quantity - product.quantity
+                Promise.resolve(updateTable('products', { name: item.name }, item)).then(() => {
+                    logger.info("Updated stock")
                 }).catch(err => { logger.error(err) })
             }
-            res.send("Ordered");
-        } else {
-            res.send("orderId already exists")
         }
-    }).catch(err => { logger.error(err) })
+        res.send("Ordered");
+    } else {
+        res.send("Order ID Already Present");
+    }
 }
 
 

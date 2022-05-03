@@ -31,7 +31,7 @@ const insertOrder = (table, doc) => {
        return resolve(mongocon.getDb().collection(table).insertMany(query, (err, cursor) => {
             if (err) {
                 logger.error(`Unable to query "${table}" table!` + err.message)
-                reject(err)
+                return reject(err)
             }
             else { return resolve(cursor) }
         }))
